@@ -1,0 +1,59 @@
+<div class="jumbotron">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">{{article?.title}}</h5>     
+    </div>
+    <div  class="card-footer">
+      {{article?.author.username}}
+      
+        <button class="btn btn-primary btn-sm">
+          Edit Article
+        </button>
+        &nbsp;
+        <button class="btn btn-primary btn-sm">
+          Delete Article
+        </button>
+      
+    </div>
+  </div>
+  <p class="card-text">{{article?.body}}</p>
+  <br>
+  <hr>
+  <br>
+  <div *ngIf="(isLoggedIn | async)"class="form-group">
+    <div class="bg-dark" style="position: absolute; 
+                                    right:300px; left: 300px;">
+      <form [formGroup]="commentForm" (ngSubmit)="onSubmit()">
+        <textarea type="text" class="form-control" formControlName="comment" rows="2" placeholder="Write your comment"></textarea>
+        <div class="card-footer" style="margin-bottom: 25px">
+          <button [disabled]="loading" class="btn btn-primary btn-sm" style="position: absolute; right: 10px;">Add
+            Comment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div  *ngIf="!(isLoggedIn | async)">
+    <p>
+      <a routerLink="/login">Sign In</a>
+      or 
+      <a routerLink="/register">Sign up</a>
+       to post comment to the article.
+    </p>
+  </div>
+</div>
+<br>
+<div style="position: absolute; right:300px; left: 300px;">
+<div  *ngFor="let comment of comments">
+  <div class="card">
+    <span class="card-text">{{comment.body}}</span>
+    <span class="card-footer" style=" margin:0px; padding: 0px;">
+      <small>{{comment.author.username}}</small>
+      <span *ngIf="canModifyComment(comment.author.username)">
+        <button (click)="deleteComment(comment.id, comment.author.username)"  style="float:right" class="bg-danger fa fa-trash">
+        </button>
+      </span>
+    </span>
+  </div>
+  <p></p>
+</div>
+</div>

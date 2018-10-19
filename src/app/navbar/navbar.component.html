@@ -1,0 +1,21 @@
+<nav class="navbar navbar-fixed-top navbar-dark bg-dark ">
+  <h5>Devlopers Blog</h5>
+  <div class="navbar-expand ml-auto navbar-nav">
+    <div class="mr-sm-2">
+      <a class="nav-link active" href="#">Home</a>&nbsp;
+    </div>
+    <div *ngIf="!(isLoggedIn | async)" class="mr-sm-2">
+      <a class="nav-link" routerLink="/login">Login</a>&nbsp;
+    </div>
+    <div *ngIf="!(isLoggedIn | async)" class="mr-sm-2">
+      <a class="nav-link" routerLink="/register">Sign Up</a>&nbsp;
+    </div>
+    <div *ngIf="(isLoggedIn | async)" class="nav-item">
+      <a class="nav-link" routerLink="/newarticle">New Article</a>&nbsp;
+    </div>
+    <div *ngIf="(isLoggedIn | async)" (click)="authService.logout()" class="mr-sm-2">
+        <a class="nav-link" >Logout</a>&nbsp;
+      </div>
+  </div>
+</nav>
+<!-- <router-outlet></router-outlet> -->
