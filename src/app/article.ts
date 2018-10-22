@@ -1,3 +1,5 @@
+import { Url } from 'url';
+
 export class Article {
     title: string;
     slug: string;
@@ -6,4 +8,10 @@ export class Article {
     updatedAt: Date;
     tagList: any;
     description: string;
+    author: {
+        username: string;
+        bio: string;
+        image: Url;
+        following: boolean;
+    };
 }

@@ -23,11 +23,13 @@ export class ArticleDetailsComponent implements OnInit {
   comments: Array<Comment>;
   currentUser: any;
   isLoggedIn: Observable<boolean>;
+  isFollowed: boolean;
 
   constructor(private activatedRoute: ActivatedRoute, private articleService: PostsService,
     private formbuilder: FormBuilder, private commentsService: CommentsService,
     private router: Router, private userService: UserService, private authService: AuthenticationService) {
       this.isLoggedIn = authService.isLoggedIn();
+      this.isFollowed = false;
      }
 
   ngOnInit() {
@@ -38,10 +40,16 @@ export class ArticleDetailsComponent implements OnInit {
       this.slug = params['slug'];
     });
     this.articleService.getArticleBySlug(this.slug)
-      .subscribe((data: any) => { this.article = data.article, console.log(this.article); });
+      .subscribe((data: any) => { this.article = data.article,
+        this.userService.getProfile(this.article.author.username)
+        .subscribe((profile: any) => {
+        this.isFollowed = profile.profile.following;
+        console.log(this.isFollowed);
+        });
+      });
 
     this.commentsService.getComments(this.slug)
-      .subscribe((data: any) => { this.comments = data.comments, console.log(this.comments); });
+      .subscribe((data: any) => { this.comments = data.comments; });
       this.userService.getUserByToken()
       .pipe(first())
       .subscribe(
@@ -49,6 +57,12 @@ export class ArticleDetailsComponent implements OnInit {
           this.currentUser = data.user;
         }
       );
+
+      // this.userService.getProfile(this.article.author.username)
+      // .subscribe((data: any) => {
+      //   console.log('hiiiiii' + JSON.stringify(data));
+      //   this.isFolowed = data.profile.following;
+      // });
   }
 
   get f() {
@@ -61,25 +75,54 @@ export class ArticleDetailsComponent implements OnInit {
       .subscribe(
         (data) => {
           window.location.reload();
-          console.log('comment added');
         }
       );
   }
 
-  canModifyComment(username): boolean {
+  canModifyComment(username?: string): boolean {
     if (username === this.currentUser.username) {
       return true;
     }
       return false;
   }
 
-  deleteComment(id: number, username: string) {
+  deleteComment(id: number, username?: string) {
     this.commentsService.deleteComment(this.slug, id)
       .pipe(first())
       .subscribe(
         data => {
           window.location.reload();
         }
+      );
+  }
+
+  followUser(username?: string) {
+    this.userService.followUser(username)
+    .pipe(first())
+      .subscribe(
+        data => {
+          console.log('done');
+          window.location.reload();
+        },
+      );
+  }
+
+  deleteArticle(slug: string) {
+    this.articleService.deleteArticle(slug)
+    .subscribe(
+      (data) => {
+        this.router.navigateByUrl('/');
+      });
+  }
+
+  unFollowUser(username?: string) {
+    this.userService.unFollowuser(username)
+    .pipe(first())
+      .subscribe(
+        data => {
+          console.log('done');
+          window.location.reload();
+        },
       );
   }
 }

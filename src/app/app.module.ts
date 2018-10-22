@@ -18,6 +18,8 @@ import { JwtInterceptor } from './jwt.interceptors';
 import { GlobalfeedComponent } from './globalfeed/globalfeed.component';
 import { ArticleDetailsComponent } from './article-details/article-details.component';
 import { NewarticleComponent } from './newarticle/newarticle.component';
+import { EditarticleComponent } from './editarticle/editarticle.component';
+import { YoursfeedComponent } from './yoursfeed/yoursfeed.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent /*, canActivate: [AuthGuard]*/ },
@@ -25,9 +27,12 @@ const appRoutes: Routes = [
   { path: 'register', component: RegisterComponent},
   { path: 'home', component: HomeComponent},
   { path: 'globalfeed', component: GlobalfeedComponent},
-  {path: 'articledetails', component: ArticleDetailsComponent, canActivate: [AuthGuard]},
-  { path: 'articledetails/:slug', component: ArticleDetailsComponent, canActivate: [AuthGuard]},
+  // { path: 'globalfeed/tag?=:tag', component: GlobalfeedComponent},
+  { path: 'yoursfeed', component: YoursfeedComponent},
+  { path: 'articledetails', component: ArticleDetailsComponent},
+  { path: 'articledetails/:slug', component: ArticleDetailsComponent},
   { path: 'newarticle', component: NewarticleComponent, canActivate: [AuthGuard]},
+  { path: 'editarticle', component: EditarticleComponent},
 
   // otherwise redirect to home
   { path: '**', redirectTo: '' }
@@ -42,7 +47,9 @@ const appRoutes: Routes = [
     RegisterComponent,
     GlobalfeedComponent,
     ArticleDetailsComponent,
-    NewarticleComponent
+    NewarticleComponent,
+    EditarticleComponent,
+    YoursfeedComponent
   ],
   imports: [
     BrowserModule,

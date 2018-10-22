@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { AuthenticationService } from '../authentication.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -7,7 +9,10 @@ import { Component } from '@angular/core';
 })
 export class HomeComponent  {
 
-  constructor() {
+  isLoggedIn: Observable<boolean>;
+  constructor(
+    private authService: AuthenticationService) {
+    this.isLoggedIn = authService.isLoggedIn();
   }
 
   activeTab = 'globalfeed';

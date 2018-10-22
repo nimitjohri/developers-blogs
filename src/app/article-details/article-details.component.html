@@ -1,26 +1,30 @@
 <div class="jumbotron">
   <div class="card">
     <div class="card-body">
-      <h5 class="card-title">{{article?.title}}</h5>     
+      <h5 class="card-title">{{article?.title}}</h5>
+      <a *ngIf="!isFollowed" class="btn btn-info" (click)="followUser(article?.author?.username)" style="float:right">
+        <i class="fa fa-plus-circle" aria-hidden="true"></i> Follow {{article?.author.username}}</a>
+      <a *ngIf="isFollowed" class="btn btn-info" (click)="unFollowUser(article?.author?.username)" style="float:right">
+        <i class="fa fa-plus-circle" aria-hidden="true"></i> UnFollow {{article?.author?.username}}</a>
     </div>
-    <div  class="card-footer">
+    <div class="card-footer">
       {{article?.author.username}}
-      
-        <button class="btn btn-primary btn-sm">
-          Edit Article
-        </button>
+      <span *ngIf="canModifyComment(article?.author?.username)">
+        <a [routerLink]="['/editarticle']" [queryParams]="{slug:article.slug}" class="btn btn-primary btn-sm">
+          <i class="fa fa-edit"></i> Edit Article
+        </a>
         &nbsp;
-        <button class="btn btn-primary btn-sm">
-          Delete Article
+        <button class="btn btn-primary btn-sm" (click)="deleteArticle(slug)">
+          <i class="fa fa-trash-o" aria-hidden="true"></i> Delete Article
         </button>
-      
+      </span>
     </div>
   </div>
   <p class="card-text">{{article?.body}}</p>
   <br>
   <hr>
   <br>
-  <div *ngIf="(isLoggedIn | async)"class="form-group">
+  <div *ngIf="(isLoggedIn | async)" class="form-group">
     <div class="bg-dark" style="position: absolute; 
                                     right:300px; left: 300px;">
       <form [formGroup]="commentForm" (ngSubmit)="onSubmit()">
@@ -32,28 +36,29 @@
       </form>
     </div>
   </div>
-  <div  *ngIf="!(isLoggedIn | async)">
+  <div *ngIf="!(isLoggedIn | async)">
     <p>
       <a routerLink="/login">Sign In</a>
-      or 
+      or
       <a routerLink="/register">Sign up</a>
-       to post comment to the article.
+      to post comment to the article.
     </p>
   </div>
 </div>
 <br>
 <div style="position: absolute; right:300px; left: 300px;">
-<div  *ngFor="let comment of comments">
-  <div class="card">
-    <span class="card-text">{{comment.body}}</span>
-    <span class="card-footer" style=" margin:0px; padding: 0px;">
-      <small>{{comment.author.username}}</small>
-      <span *ngIf="canModifyComment(comment.author.username)">
-        <button (click)="deleteComment(comment.id, comment.author.username)"  style="float:right" class="bg-danger fa fa-trash">
-        </button>
+  <div *ngFor="let comment of comments">
+    <div class="card">
+      <span class="card-text">{{comment?.body}}</span>
+      <span class="card-footer" style=" margin:0px; padding: 0px;">
+        <small>{{comment?.author?.username}}</small>
+        <span *ngIf="canModifyComment(comment.author.username)">
+          <a class="btn btn-danger" (click)="deleteComment(comment?.id, comment?.author?.username)" style="float:right">
+            <i class="fa fa-trash-o bg-danger" aria-hidden="true"></i> Delete
+          </a>
+        </span>
       </span>
-    </span>
+    </div>
+    <p></p>
   </div>
-  <p></p>
-</div>
 </div>
